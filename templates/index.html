@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio Files</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .audio-player {
+        width: 100%;
+        max-width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <div class="container">
+      <h1 class="my-4">Audio Files</h1>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th style="width: 30%">Play</th>
+            <th>Record Recitation</th>
+            <!-- <th>Uploaded Recitation</th> -->
+            <th>Comparison Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for file in audio_files %}
+          <tr>
+            <td>{{ file.split('/')[-1] }}</td>
+            <td>
+              <audio controls class="audio-player">
+                <source
+                  src="{{ url_for('static', filename='audio/dataset/' + file) }}"
+                  type="audio/ogg"
+                />
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <button
+                onclick="startRecording(this)"
+                class="btn btn-secondary mb-2"
+              >
+                Record
+              </button>
+              <button
+                onclick="stopRecording(this)"
+                class="btn btn-secondary mb-2 ml-2"
+                disabled
+              >
+                Stop
+              </button>
+              <form
+                action="{{ url_for('upload_file') }}"
+                method="post"
+                enctype="multipart/form-data"
+                class="form-inline mt-2"
+                onsubmit="return submitRecording(this, '{{ file }}')"
+              >
+                <input
+                  type="file"
+                  name="file"
+                  id="fileInput-{{ loop.index }}"
+                  style="display: none"
+                />
+                <input
+                  type="hidden"
+                  name="original_file"
+                  id="originalFile-{{ loop.index }}"
+                  value="{{ file }}"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-primary mb-2 ml-2"
+                  disabled
+                >
+                  Upload
+                </button>
+              </form>
+            </td>
+            <!-- <td>
+              {% if uploaded_files[file] %}
+              <audio controls class="audio-player">
+                <source
+                  src="{{ url_for('static', filename='uploads/' + uploaded_files[file]) }}"
+                  type="audio/ogg"
+                />
+                Your browser does not support the audio element.
+              </audio>
+              {% else %} No recording uploaded {% endif %}
+            </td> -->
+            <td id="comparisonResult-{{ loop.index }}">No result yet</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Recording Script -->
+    <script>
+      let mediaRecorder;
+      let recordedChunks = [];
+      let currentIndex;
+
+      function startRecording(button) {
+        currentIndex =
+          Array.from(button.closest("tr").parentNode.children).indexOf(
+            button.closest("tr")
+          ) + 1;
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then((stream) => {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = (event) => {
+              if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+              }
+            };
+            mediaRecorder.start();
+            button.disabled = true;
+            button.nextElementSibling.disabled = false;
+          })
+          .catch((error) =>
+            console.error("Error accessing media devices.", error)
+          );
+      }
+
+      function stopRecording(button) {
+        mediaRecorder.stop();
+        button.disabled = true;
+        button.previousElementSibling.disabled = false;
+
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(recordedChunks, {
+            type: "audio/ogg; codecs=opus",
+          });
+          const file = new File([blob], `recorded_${currentIndex}.ogg`, {
+            type: "audio/ogg; codecs=opus",
+          });
+
+          const fileInput = document.getElementById(
+            `fileInput-${currentIndex}`
+          );
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          fileInput.files = dataTransfer.files;
+
+          button
+            .closest("td")
+            .querySelector('button[type="submit"]').disabled = false;
+          recordedChunks = [];
+        };
+      }
+
+      function submitRecording(form, originalFile) {
+        const fileInput = form.querySelector('input[type="file"]');
+        if (!fileInput.files.length) {
+          alert("No recording available to upload.");
+          return false;
+        }
+        const originalFileInput = form.querySelector(
+          'input[name="original_file"]'
+        );
+        originalFileInput.value = originalFile;
+
+        const formData = new FormData(form);
+        fetch(form.action, {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const resultCell = document.getElementById(
+              `comparisonResult-${currentIndex}`
+            );
+            if (data.result) {
+              resultCell.textContent = "Correct";
+            } else {
+              resultCell.textContent = "Incorrect";
+            }
+            if (data.dataset_text && data.user_text) {
+              resultCell.textContent += ` (Expected: ${data.dataset_text}, Received: ${data.user_text})`;
+            } else if (data.error) {
+              resultCell.textContent = `Error: ${data.error}`;
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+        return false;
+      }
+    </script>
+  </body>
+</html>

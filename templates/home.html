@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Home</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="canonical" href="https://codepen.io/miguelquispe/pen/KVXBRQ" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link
+      href="//fonts.googleapis.com/css?family=Merriweather|Montserrat:400,700|Dancing+Script:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      a {
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Merriweather", serif;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .hero {
+        text-align: center;
+        position: relative;
+        height: auto;
+        padding-bottom: 80px;
+        background: #4f2f60 url("https://miguelquispe.com/pen//hero.jpg") center
+          top no-repeat;
+        background-size: cover;
+        color: #fff;
+        overflow: hidden;
+      }
+      .hero h1 {
+        margin: 50px 0 20px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 35px;
+      }
+      .hero h1 span {
+        font: 700 60px/1 "Dancing Script", cursive;
+        display: block;
+      }
+      .hero h2 {
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 1em;
+        font-weight: 400;
+        padding: 20px;
+      }
+      @media only screen and (min-width: 37.5em) {
+        .hero h1 {
+          font-size: 50px;
+        }
+        .hero h1 span {
+          font-size: 76px;
+        }
+        .hero h2 {
+          width: 76%;
+          font-size: 18px;
+        }
+      }
+
+      .wrapper {
+        margin: 0 auto;
+        width: 96%;
+        max-width: 1120px;
+      }
+
+      .section {
+        padding: 60px 0;
+      }
+      .section__title {
+        font-size: 24px;
+        color: #3b3b58;
+        text-align: center;
+        font-family: "Montserrat", sans-serif;
+        margin: 14px 0;
+      }
+      .section__intro {
+        display: block;
+        text-align: center;
+        margin: 0 5% 30px;
+      }
+      @media only screen and (min-width: 43.75em) {
+        .section__intro {
+          margin-left: 15%;
+          margin-right: 15%;
+        }
+      }
+      .section--cta {
+        color: #454545;
+        background: #f1f1f1;
+      }
+
+      .box {
+        display: flex;
+        flex: 1 0 100%;
+        margin-bottom: 20px;
+        background: #f9f9f9;
+      }
+      .box__grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .box__title {
+        font-family: "Montserrat", sans-serif;
+      }
+      .box__more {
+        color: #ff4e5c;
+      }
+      .box__content {
+        color: #454545;
+        text-align: center;
+        padding: 20px;
+      }
+      .box__content > i {
+        color: #3b3b58;
+      }
+      .box__content:hover .box__more {
+        color: #ff3545;
+      }
+      .box__content:hover .box__more i {
+        padding-left: 4px;
+        transition: all 0.2s ease-in-out;
+      }
+      @media only screen and (min-width: 43.75em) {
+        .box {
+          flex: 0 0 30%;
+        }
+      }
+
+      .btn {
+        color: #fff;
+        font-family: "Montserrat", sans-serif;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+        max-width: 300px;
+        padding: 12px 18px;
+        border-radius: 100px;
+        background: #ff4e5c;
+      }
+      .btn:hover {
+        background: #ff3545;
+      }
+
+      .footer {
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        background: #3b3b58;
+      }
+      .footer p {
+        opacity: 0.65;
+      }
+    </style>
+
+    <script>
+      window.console = window.console || function (t) {};
+    </script>
+  </head>
+
+  <body translate="no">
+    {% include 'home-header.html' %}
+    <section class="hero">
+      <h1><span>Learn</span> Tajweed</h1>
+      <h2>
+        Enhance your Quranic recitation with precision and beauty. Master the
+        art of Tajweed through comprehensive lessons, interactive exercises, and
+        personalized feedback.
+      </h2>
+    </section>
+    <section class="section">
+      <div class="wrapper">
+        <h2 class="section__title">Enhance Your Tajweed Skills</h2>
+        <p class="section__intro">
+          Dive into the art of Tajweed with our structured lessons, practical
+          exercises, and expert guidance. Improve your Quranic recitation to
+          achieve clarity and beauty.
+        </p>
+        <div class="box__grid">
+          <article class="box">
+            <a class="box__content" href="#"
+              ><i class="fa fa-lightbulb-o fa-3x"></i>
+              <h3 class="box__title">Interactive Lessons</h3>
+              <p>
+                Engage with interactive lessons designed to make learning
+                Tajweed easy and enjoyable. Each lesson is crafted to build your
+                skills step-by-step.
+              </p>
+              <span class="box__more"
+                >Read more <i class="fa fa-arrow-right"></i></span
+            ></a>
+          </article>
+          <article class="box">
+            <a class="box__content" href="#"
+              ><i class="fa fa-code fa-3x"></i>
+              <h3 class="box__title">Practical Exercises</h3>
+              <p>
+                Apply what you've learned with practical exercises. Practice
+                recitations and receive instant feedback to ensure you master
+                each rule of Tajweed.
+              </p>
+              <span class="box__more"
+                >Read more <i class="fa fa-arrow-right"></i></span
+            ></a>
+          </article>
+          <article class="box">
+            <a class="box__content" href="#"
+              ><i class="fa fa-mobile fa-3x"></i>
+              <h3 class="box__title">Expert Guidance</h3>
+              <p>
+                Learn from experts who provide detailed explanations and tips.
+                Get personalized feedback to perfect your recitation.
+              </p>
+              <span class="box__more"
+                >Read more <i class="fa fa-arrow-right"></i></span
+            ></a>
+          </article>
+        </div>
+      </div>
+    </section>
+    <div class="section section--cta">
+      <div class="wrapper">
+        <h2 class="section__title">SOME TITLE</h2>
+        <p class="section__intro">
+          Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Maecenas
+          faucibus mollis interdum. Curabitur blandit tempus porttitor.
+        </p>
+        <a class="btn" href="#">TEXT BUTTON</a>
+      </div>
+    </div>
+    <div class="footer">
+      <p>&copy; 2024 Learn Tajweed</p>
+    </div>
+  </body>
+</html>
